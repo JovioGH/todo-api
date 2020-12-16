@@ -1,0 +1,6 @@
+{
+    "appCode": "API-DEV",
+    "app": {
+        "port": 4001
+    }
+}
