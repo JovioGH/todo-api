@@ -2,5 +2,11 @@
     "appCode": "API-DEV",
     "app": {
         "port": 4001
+    },
+    "db": {
+        "name": "todos",
+        "username": "root",
+        "host": "localhost",
+        "port": 3306
     }
 }
