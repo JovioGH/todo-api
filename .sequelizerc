@@ -1,0 +1,18 @@
+'use strict';
+
+const path = require('path');
+
+// defaults
+let dbConfig  = path.resolve('src', 'infrastructure', 'database', 'config.js');
+let models_path = path.resolve('src', 'infrastructure', 'database', 'models');
+let migrations_path = path.resolve('src', 'infrastructure', 'database', 'migrations');
+let seeders_path = path.resolve('src', 'infrastructure', 'database', 'seeders');
+
+const sequelizeCliConfig = {
+  config: dbConfig,
+  'models-path': models_path,
+  'migrations-path': migrations_path,
+  'seeders-path': seeders_path
+};
+
+module.exports = sequelizeCliConfig;
