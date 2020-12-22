@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const config = require('config');
+const { v1Router } = require('./router');
 
 const app = express();
 const isProduction = process.env.NODE_ENV === 'production';
@@ -23,6 +24,8 @@ if (!isProduction) {
 app.use('/health', (req, res) => {
     res.status(200).send('Todo API is alive');
 });
+
+app.use('/api/v1', v1Router);
 
 app.listen(appPort, () => {
     console.log(`Server listening on ${appPort}`);
