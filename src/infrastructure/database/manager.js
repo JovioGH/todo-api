@@ -1,12 +1,10 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const dbConfig = require('./config');
 const mysql = require('mysql2/promise');
+const Todo = require('./models/Todo');
 
 const db = {};
 
-initialize();
-
-// Testing Database connection
 async function initialize() {
     try {
         const { host, port, username, password, database } = dbConfig;
@@ -14,12 +12,19 @@ async function initialize() {
         await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
 
         const sequelize = new Sequelize(dbConfig);
-
-        await sequelize.authenticate();
         console.log('Connection has been established successfully');
+
+        db.Sequelize = Sequelize;
+        db.sequelize = sequelize;
+
+        db.Todo = Todo(sequelize, DataTypes);
+
+        sequelize.sync();
     } catch (error) {
         console.error('Unable to connect to Database: ', error);
     }
 };
+
+initialize();
 
 module.exports = db;

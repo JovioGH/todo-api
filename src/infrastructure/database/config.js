@@ -10,7 +10,9 @@ const dbConfig = {
     host: config.get('db.host'),
     port: config.get('db.port'),
     dialect: 'mysql',
-    models: [__dirname + '/models']
+    define: {
+        freezeTableName: true
+    }
 }
 
 module.exports = dbConfig;
