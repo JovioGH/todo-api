@@ -1,7 +1,5 @@
 'use strict'
 
-const { DataTypes } = require('sequelize/types')
-
 module.exports = (sequelize, DataTypes) => {
     const Todo = sequelize.define('todo', {
         id: {
@@ -19,5 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             defaultValue: 'pending'
         }
-    })
+    });
+
+    return Todo;
 }

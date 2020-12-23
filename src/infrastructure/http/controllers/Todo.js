@@ -1,12 +1,17 @@
+const { TodoRepo } = require('../../../domain/todo/repo/TodoRepo');
+
 class TodoController {
-    constructor(
-    ) { }
+    constructor() {
+        this.todoRepo = new TodoRepo();
+    }
 
     async fetchAll(req) {
-        const { query } = req;
-        console.log('<-- query params -->', query);
-        return {
-            todos: ['Great move']
+        try {
+            const { query } = req;
+            const todos = await this.todoRepo.getAll();
+            return todos;
+        } catch (error) {
+            throw new Error(error);
         }
     }
 }
