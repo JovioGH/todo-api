@@ -18,9 +18,7 @@ class Todo extends Sequelize.Model {
                 type: DataTypes.STRING,
                 defaultValue: 'pending'
             }
-        }, {
-            sequelize: sequelize
-        })
+        }, { sequelize: sequelize })
     }
 }
 
