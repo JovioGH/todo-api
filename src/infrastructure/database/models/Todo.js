@@ -1,23 +1,27 @@
-'use strict'
+const Sequelize = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-    const Todo = sequelize.define('todo', {
-        id: {
-            allowNull: false,
-            autoIncrement: true,
-            primaryKey: true,
-            type: DataTypes.INTEGER
-        },
-        name: {
-            allowNull: false,
-            type: DataTypes.STRING
-        },
-        status: {
-            allowNull: false,
-            type: DataTypes.STRING,
-            defaultValue: 'pending'
-        }
-    });
-
-    return Todo;
+class Todo extends Sequelize.Model {
+    static init(sequelize, DataTypes) {
+        return super.init({
+            id: {
+                allowNull: false,
+                autoIncrement: true,
+                primaryKey: true,
+                type: DataTypes.INTEGER
+            },
+            name: {
+                allowNull: false,
+                type: DataTypes.STRING
+            },
+            status: {
+                allowNull: false,
+                type: DataTypes.STRING,
+                defaultValue: 'pending'
+            }
+        }, {
+            sequelize: sequelize
+        })
+    }
 }
+
+module.exports = { Todo }

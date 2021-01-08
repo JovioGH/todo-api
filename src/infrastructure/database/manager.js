@@ -1,30 +1,39 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const dbConfig = require('./config');
+const { Sequelize } = require('sequelize');
 const mysql = require('mysql2/promise');
-const Todo = require('./models/Todo');
+const dbConfig = require('./config');
+const sequelize = new Sequelize(dbConfig);
 
-const db = {};
+// Import required models
+const { Todo } = require('./models/Todo');
 
-async function initialize() {
+// Initialize models
+const models = {
+    Todo: Todo.init(sequelize, Sequelize)
+};
+
+const db = {
+    ...models,
+    sequelize
+};
+
+async function createDatabase() {
     try {
         const { host, port, username, password, database } = dbConfig;
         const connection = await mysql.createConnection({ host, port, user: username, password });
-        await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
+        const databaseInstance = await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
 
-        const sequelize = new Sequelize(dbConfig);
-        console.log('Connection has been established successfully');
-
-        db.Sequelize = Sequelize;
-        db.sequelize = sequelize;
-
-        db.Todo = Todo(sequelize, DataTypes);
-
-        sequelize.sync();
+        console.log('Database created successfully, connection created', databaseInstance);
     } catch (error) {
-        console.error('Unable to connect to Database: ', error);
+        console.error('Unable to create Database:', error);
     }
 };
 
-initialize();
+sequelize
+    .sync()
+    .catch(err => {
+        console.error('Unable to connect to database');
+        // Create database if not exits
+        createDatabase();
+    })
 
 module.exports = db;
