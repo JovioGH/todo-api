@@ -1,32 +1,23 @@
-const Joi = require('joi');
-const { pick } = require('lodash');
 const { Todo } = require('../../../infrastructure/database/models/Todo');
+const { BaseUseCase } = require('../../utils/BaseUseCase');
 const { CREATE_TODO } = require('../validators');
 
 
-class CreateTodoUseCase {
+class CreateTodoUseCase extends BaseUseCase {
     constructor(params) {
+        super();
+
         this.params = params;
     }
 
     async execute() {
         const sanitizedParams = this.sanitizeParams(this.params, CREATE_TODO);
-
         if (await this.isNameUsed(sanitizedParams.name)) {
             throw new Error('Todo name is already used')
         }
 
         const todo = Todo.build(sanitizedParams);
         return await todo.save();
-    }
-
-    sanitizeParams(params, joiObject) {
-        const sanitizedParams = pick(params, Object.keys(joiObject.describe().keys));
-        if (joiObject) {
-            Joi.assert(sanitizedParams, joiObject);
-        }
-
-        return sanitizedParams;
     }
 
     async isNameUsed(name) {
@@ -42,4 +33,4 @@ class CreateTodoUseCase {
     }
 }
 
-module.exports = { CreateTodoUseCase }
+module.exports = { CreateTodoUseCase };

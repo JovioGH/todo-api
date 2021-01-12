@@ -17,10 +17,19 @@ TodoRouter.get('/', async (req, res, next) => {
 TodoRouter.post('/', async (req, res, next) => {
     try {
         const createdTodo = await controller.create(req)
-        res.status(200).send(createdTodo);
+        res.status(200).json(createdTodo);
     } catch (error) {
         next(error);
     }
-})
+});
+
+TodoRouter.put('/:id(\\d+)', async (req, res, next) => {
+    try {
+        const updateTodo = await controller.update(req);
+        res.status(200).send(updateTodo)
+    } catch (error) {
+        next(error);
+    }
+});
 
 module.exports = { TodoRouter };
