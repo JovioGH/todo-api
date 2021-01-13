@@ -13,7 +13,6 @@ TodoRouter.get('/', async (req, res, next) => {
     }
 });
 
-
 TodoRouter.post('/', async (req, res, next) => {
     try {
         const createdTodo = await controller.create(req)
@@ -26,10 +25,20 @@ TodoRouter.post('/', async (req, res, next) => {
 TodoRouter.put('/:id(\\d+)', async (req, res, next) => {
     try {
         const updateTodo = await controller.update(req);
-        res.status(200).send(updateTodo)
+        res.status(200).send(updateTodo);
     } catch (error) {
         next(error);
     }
+});
+
+TodoRouter.delete('/:id(\\d+)', async (req, res, next) => {
+    try {
+        const deletedTodo = await controller.delete(req);
+        res.status(200).send(deletedTodo);
+    } catch (error) {
+        next(error);
+    }
+
 });
 
 module.exports = { TodoRouter };
