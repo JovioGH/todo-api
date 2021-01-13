@@ -6,6 +6,7 @@ const compression = require('compression');
 const morgan = require('morgan');
 const config = require('config');
 const { v1Router } = require('./router');
+const { ErrorMiddleware } = require('../../middleware/error.middleware');
 
 const app = express();
 const isProduction = process.env.NODE_ENV === 'production';
@@ -26,6 +27,7 @@ app.use('/health', (req, res) => {
 });
 
 app.use('/api/v1', v1Router);
+app.use(ErrorMiddleware);
 
 app.listen(appPort, () => {
     console.log(`Server listening on ${appPort}`);
