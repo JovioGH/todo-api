@@ -16,24 +16,19 @@ const db = {
     sequelize
 };
 
-async function createDatabase() {
+async function connect() {
     try {
         const { host, port, username, password, database } = dbConfig;
         const connection = await mysql.createConnection({ host, port, user: username, password });
         const databaseInstance = await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
 
         console.log('Database created successfully, connection created', databaseInstance);
+        await sequelize.sync();
     } catch (error) {
         console.error('Unable to create Database:', error);
     }
 };
 
-sequelize
-    .sync()
-    .catch(err => {
-        console.error('Unable to connect to database');
-        // Create database if not exits
-        createDatabase();
-    })
+connect();
 
 module.exports = db;
