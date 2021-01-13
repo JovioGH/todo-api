@@ -1,4 +1,4 @@
-const db = require('../../../infrastructure/database/manager');
+const { ModelNotFoundException } = require('../../../exceptions/ModelNotFoundException');
 const { Todo } = require('../../../infrastructure/database/models/Todo');
 
 class TodoRepo {
@@ -8,16 +8,15 @@ class TodoRepo {
     }
 
     async getAll() {
-        const results = await db.Todo.findAll();
-        return results;
+        return await Todo.findAll();
     }
 
-    async findById(id) {
+    async findOrFail(id) {
         try {
-            const todo = await Todo.findByPk(id);
+            const todo = await Todo.scope().findByPk(id, { rejectOnEmpty: true });
             return todo;
         } catch (error) {
-            throw new Error(`Todo with id ${id} not found`)
+            throw new ModelNotFoundException(`Todo with id ${id} not found`)
         }
     }
 }

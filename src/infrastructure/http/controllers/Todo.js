@@ -1,6 +1,7 @@
 const { TodoRepo } = require('../../../domain/todo/repo/TodoRepo');
 const { CreateTodoUseCase } = require('../../../domain/todo/useCase/CreateTodoUseCase');
 const { UpdateTodoUseCase } = require('../../../domain/todo/useCase/updateTodoUseCase');
+const { HttpException } = require('../../../exceptions/HttpException');
 
 class TodoController {
     constructor() {
@@ -32,14 +33,12 @@ class TodoController {
         const { body } = req;
 
         try {
-            const todo = await this.todoRepo.findById(id);
+            const todo = await this.todoRepo.findOrFail(Number(id));
             const useCase = new UpdateTodoUseCase(body, todo);
             return useCase.run();
-        } catch (e) {
-            console.log('--->', e)
-            throw new Error('Something wrong happening');
+        } catch (error) {
+            throw new HttpException(error.status, error.message || error.name)
         }
-
     }
 
 }
