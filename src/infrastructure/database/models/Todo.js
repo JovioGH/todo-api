@@ -17,8 +17,22 @@ class Todo extends Sequelize.Model {
                 allowNull: false,
                 type: DataTypes.STRING,
                 defaultValue: 'pending'
+            },
+            createdAt: {
+                type: DataTypes.DATE
+            },
+            updatedAt: {
+                type: DataTypes.DATE
+            },
+            deletedAt: {
+                allowNull: true,
+                type: DataTypes.DATE
             }
-        }, { sequelize: sequelize })
+        }, {
+            sequelize: sequelize,
+            underscored: true,
+            paranoid: true
+        })
     }
 }
 
