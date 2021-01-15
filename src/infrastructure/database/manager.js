@@ -5,10 +5,12 @@ const sequelize = new Sequelize(dbConfig);
 
 // Import required models
 const { Todo } = require('./models/Todo');
+const { Subtask } = require('./models/Subtask');
 
 // Initialize models
 const models = {
-    Todo: Todo.init(sequelize, Sequelize)
+    Todo: Todo.init(sequelize, Sequelize),
+    Subtask: Subtask.init(sequelize, Sequelize)
 };
 
 const db = {
@@ -29,6 +31,19 @@ async function connect() {
     }
 };
 
+async function associate() {
+    models.Subtask.belongsTo(Todo, {
+        foreignKey: {
+            allowNull: false
+        }
+    });
+
+    models.Todo.hasMany(Subtask, {
+        onDelete: 'CASCADE'
+    });
+}
+
+associate();
 connect();
 
 module.exports = db;

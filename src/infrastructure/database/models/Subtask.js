@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-const { Todo } = require('./Todo');
 
 class Subtask extends Sequelize.Model {
     static init(sequelize, DataTypes) {
@@ -38,15 +37,6 @@ class Subtask extends Sequelize.Model {
 }
 
 
-Subtask.belongsTo(Todo, {
-    foreignKey: {
-        allowNull: false,
-        name: 'todoId'
-    }
-});
 
-Todo.hasMany(Subtask, {
-    onDelete: 'CASCADE'
-});
 
 module.exports = { Subtask };
