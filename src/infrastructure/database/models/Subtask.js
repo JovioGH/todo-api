@@ -31,7 +31,23 @@ class Subtask extends Sequelize.Model {
         }, {
             sequelize: sequelize,
             underscored: true,
-            paranoid: true
+            paranoid: true,
+            scopes: {
+                byTodo(id) {
+                    return {
+                        where: {
+                            todo_id: id
+                        }
+                    }
+                },
+                byStatus(status) {
+                    return {
+                        where: {
+                            status: status
+                        }
+                    }
+                }
+            }
         })
     }
 }

@@ -10,8 +10,8 @@ class SubtaskController {
 
     async fetchAll(req) {
         try {
-            const { query } = req;
-            const subtask = await this.subtaskRepo.getAll();
+            const { query: queryParams } = req;
+            const subtask = await this.subtaskRepo.getAll(queryParams);
             return subtask;
         } catch (e) {
             throw new Error(e);

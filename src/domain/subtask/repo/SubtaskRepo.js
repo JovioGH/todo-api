@@ -1,3 +1,4 @@
+const { isNil, isEmpty } = require('lodash');
 const { ModelNotFoundException } = require('../../../exceptions/ModelNotFoundException');
 const { Subtask } = require('../../../infrastructure/database/models/Subtask');
 
@@ -7,8 +8,26 @@ class SubtaskRepo {
         this.requestParams = {};
     }
 
-    async getAll() {
-        return await Subtask.findAll();
+    async getAll(params) {
+        this.scopes = [];
+
+        if (!isNil(params.todoId) && !isEmpty(params.todoId)) {
+            this.scopes.push(
+                {
+                    method: ['byTodo', params.todoId]
+                }
+            );
+        }
+
+        if (!isNil(params.status) && !isEmpty(params.status)) {
+            this.scopes.push(
+                {
+                    method: ['byStatus', params.status]
+                }
+            );
+        }
+
+        return await Subtask.scope(this.scopes).findAll();
     }
 
     async findOrFail(id) {
