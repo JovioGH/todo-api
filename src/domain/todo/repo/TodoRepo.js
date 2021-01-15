@@ -4,7 +4,7 @@ const { Todo } = require('../../../infrastructure/database/models/Todo');
 class TodoRepo {
     constructor() {
         this.scopes = [];
-        this.requestParams = {}
+        this.requestParams = {};
     }
 
     async getAll() {
