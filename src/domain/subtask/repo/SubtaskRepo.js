@@ -8,8 +8,14 @@ class SubtaskRepo {
         this.requestParams = {};
     }
 
-    async getAll(params) {
+    resetScopes() {
+        // Always reset scopes to avoid stale queries
         this.scopes = [];
+    }
+
+    applyFilters(params) {
+        this.requestParams = params;
+        this.resetScopes();
 
         if (!isNil(params.todoId) && !isEmpty(params.todoId)) {
             this.scopes.push(
@@ -27,7 +33,16 @@ class SubtaskRepo {
             );
         }
 
-        return await Subtask.scope(this.scopes).findAll();
+        return this;
+    }
+
+    async getAll() {
+        const subtask = await Subtask.scope(this.scopes).findAndCountAll();
+
+        return {
+            count: subtask.count,
+            rows: subtask.rows
+        }
     }
 
     async findOrFail(id) {
