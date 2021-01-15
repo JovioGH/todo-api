@@ -5,7 +5,8 @@ const CREATE_SUBTASK = Joi.object().keys({
         .max(255)
         .min(5),
     status: Joi.string()
-        .optional()
+        .optional().
+        valid('pending', 'doing', 'done')
 });
 
 module.exports = { CREATE_SUBTASK }

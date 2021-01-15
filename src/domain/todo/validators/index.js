@@ -5,6 +5,7 @@ const CREATE_TODO = Joi.object().keys({
         .max(255)
         .min(5),
     status: Joi.string()
+        .valid('pending', 'done', 'doing')
         .optional()
 });
 
