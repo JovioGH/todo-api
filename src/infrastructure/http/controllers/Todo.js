@@ -11,8 +11,8 @@ class TodoController {
 
     async fetchAll(req) {
         try {
-            const { query } = req;
-            const todos = await this.todoRepo.getAll();
+            const { query: queryParams } = req;
+            const todos = await this.todoRepo.applyFilters(queryParams).getAll();
             return todos;
         } catch (error) {
             throw new Error(error);

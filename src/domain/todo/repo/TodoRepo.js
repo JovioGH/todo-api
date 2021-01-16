@@ -1,4 +1,6 @@
+const { isNil, isEmpty } = require('lodash');
 const { ModelNotFoundException } = require('../../../exceptions/ModelNotFoundException');
+const { Subtask } = require('../../../infrastructure/database/models/Subtask');
 const { Todo } = require('../../../infrastructure/database/models/Todo');
 
 class TodoRepo {
@@ -7,8 +9,37 @@ class TodoRepo {
         this.requestParams = {};
     }
 
+    resetScopes() {
+        this.scopes = [];
+    }
+
+    applyFilters(params) {
+        this.requestParams = params;
+        this.resetScopes();
+
+        if (!isNil(params.status) && !isEmpty(params.status)) {
+            this.scopes.push(
+                {
+                    method: ['byStatus', params.status]
+                }
+            )
+        }
+
+        return this;
+    }
+
     async getAll() {
-        return await Todo.findAll();
+        return await Todo.scope(this.scopes).findAndCountAll({
+            include: [
+                {
+                    model: Subtask,
+                    required: false,
+                    separate: false
+                }
+            ],
+            distinct: true,
+            order: [['createdAt', 'DESC']]
+        });
     }
 
     async findOrFail(id) {

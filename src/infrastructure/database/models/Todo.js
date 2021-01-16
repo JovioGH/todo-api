@@ -31,7 +31,16 @@ class Todo extends Sequelize.Model {
         }, {
             sequelize: sequelize,
             underscored: true,
-            paranoid: true
+            paranoid: true,
+            scopes: {
+                byStatus(status) {
+                    return {
+                        where: {
+                            status: status
+                        }
+                    }
+                }
+            }
         })
     }
 }
