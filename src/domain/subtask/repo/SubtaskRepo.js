@@ -1,58 +1,58 @@
-const { isNil, isEmpty } = require('lodash');
-const { ModelNotFoundException } = require('../../../exceptions/ModelNotFoundException');
-const { Subtask } = require('../../../infrastructure/database/models/Subtask');
-const { subtaskErrors } = require('../errors');
+const { isNil, isEmpty } = require("lodash");
+const {
+  ModelNotFoundException,
+} = require("../../../exceptions/ModelNotFoundException");
+const { Subtask } = require("../../../infrastructure/database/models/Subtask");
+const { subtaskErrors } = require("../errors");
 
 class SubtaskRepo {
-    constructor() {
-        this.scopes = [];
-        this.requestParams = {};
+  constructor() {
+    this.scopes = [];
+    this.requestParams = {};
+  }
+
+  resetScopes() {
+    // Always reset scopes to avoid stale queries
+    this.scopes = [];
+  }
+
+  applyFilters(params) {
+    if (!params.todo_id) {
+      throw new Error(subtaskErrors.NO_TODO_ID);
     }
 
-    resetScopes() {
-        // Always reset scopes to avoid stale queries
-        this.scopes = [];
+    this.requestParams = params;
+    this.resetScopes();
+
+    if (!isNil(params.todo_id) && !isEmpty(params.todo_id)) {
+      this.scopes.push({
+        method: ["byTodo", params.todo_id],
+      });
     }
 
-    applyFilters(params) {
-        if (!params.todoId) {
-            throw new Error(subtaskErrors.NO_TODO_ID);
-        }
-
-        this.requestParams = params;
-        this.resetScopes();
-
-        if (!isNil(params.todoId) && !isEmpty(params.todoId)) {
-            this.scopes.push(
-                {
-                    method: ['byTodo', params.todoId]
-                }
-            );
-        }
-
-        if (!isNil(params.status) && !isEmpty(params.status)) {
-            this.scopes.push(
-                {
-                    method: ['byStatus', params.status]
-                }
-            );
-        }
-
-        return this;
+    if (!isNil(params.status) && !isEmpty(params.status)) {
+      this.scopes.push({
+        method: ["byStatus", params.status],
+      });
     }
 
-    async getAll() {
-        return await Subtask.scope(this.scopes).findAndCountAll();
-    }
+    return this;
+  }
 
-    async findOrFail(id) {
-        try {
-            const subtask = await Subtask.scope().findByPk(id, { rejectOnEmpty: true });
-            return subtask;
-        } catch (error) {
-            throw new ModelNotFoundException(`Subtask with id ${id} not found`);
-        }
+  async getAll() {
+    return await Subtask.scope(this.scopes).findAndCountAll();
+  }
+
+  async findOrFail(id) {
+    try {
+      const subtask = await Subtask.scope().findByPk(id, {
+        rejectOnEmpty: true,
+      });
+      return subtask;
+    } catch (error) {
+      throw new ModelNotFoundException(`Subtask with id ${id} not found`);
     }
+  }
 }
 
 module.exports = { SubtaskRepo };

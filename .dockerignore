@@ -1,0 +1,15 @@
+.vscode
+node_modules
+node_modules_container
+.editorconfig
+.gitignore
+.notification_status
+.dist
+.git/
+tmp/
+dist
+LICENSE
+README.md
+Dockerfile
+Dockerfile.local
+docker-compose.yml

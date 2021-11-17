@@ -1,22 +1,22 @@
-'use strict';
+"use strict";
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable('subtask', {
+    queryInterface.createTable("subtask", {
       id: {
         type: Sequelize.INTEGER(11).UNSIGNED,
         allowNull: false,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       name: {
         type: Sequelize.STRING(255),
-        allowNull: false
+        allowNull: false,
       },
       status: {
         type: Sequelize.STRING(255),
         allowNull: false,
-        defaultValue: 'pending'
+        defaultValue: "pending",
       },
       created_at: {
         allowNull: false,
@@ -25,9 +25,18 @@ module.exports = {
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-      }
+      },
+      deleted_at: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      },
+      todo_id: {
+        type: Sequelize.INTEGER(11).UNSIGNED,
+        allowNull: false,
+      },
     });
   },
 
-  down: async (queryInterface, Sequelize) => queryInterface.dropTable('subtask')
+  down: async (queryInterface, Sequelize) =>
+    queryInterface.dropTable("subtask"),
 };

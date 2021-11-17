@@ -1,7 +1,7 @@
 /node_modules
 /dist
-.vscode
 /logs
 /tmp
 .idea
 .env
+.history

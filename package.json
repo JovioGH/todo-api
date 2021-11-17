@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./src/index.js",
+    "dev": "nodemon --inspect=0.0.0.0 ./src/index.js",
     "migrate": "npx sequelize db:migrate"
   },
   "nodemonConfig": {
@@ -34,6 +34,7 @@
     "lodash": "^4.17.20",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
+    "pg": "^8.7.1",
     "sequelize": "^6.3.5"
   }
 }
